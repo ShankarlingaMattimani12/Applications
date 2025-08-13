@@ -1,81 +1,166 @@
+// import QtQuick 2.15
+// import QtQuick.Controls 2.15
+// import QtQuick.Layouts 1.15
+
+// ApplicationWindow {
+//     visible: true
+//     width: 800
+//     height: 600
+//     title: "Apps Grid by Category"
+
+//     RowLayout {
+//         anchors.fill: parent
+
+//         // Left side: category buttons
+//         ColumnLayout {
+//             Layout.preferredWidth: 150
+//             spacing: 10
+
+//             Repeater {
+//                 model: categoriesModel
+//                 delegate: Button {
+//                     text: category
+//                     onClicked: appProxyModel.setFilterFixedString(category)
+//                 }
+//             }
+
+//             Button {
+//                 text: "Show All"
+//                 onClicked: appProxyModel.setFilterFixedString("")
+//             }
+//         }
+
+//         // Right side: apps grid
+//         GridView {
+//             Layout.fillWidth: true
+//             Layout.fillHeight: true
+//             model: appProxyModel
+//             cellWidth: 150
+//             cellHeight: 80
+//          //   spacing: 10
+
+//             delegate: Rectangle {
+//                 width: 140
+//                 height: 70
+//                 color: "#e0e0e0"
+//                 radius: 6
+//                 border.width: 1
+//                 border.color: "#999"
+
+//                 Text {
+//                     anchors.centerIn: parent
+//                     text: name
+//                 }
+//             }
+//         }
+//     }
+// }
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 ApplicationWindow {
-    id: win
     visible: true
-    width: 1000
+    width: 800
     height: 600
-    title: "Filtered Apps — Left buttons / Right list"
+    title: "Apps Grid by Category"
 
-    Row {
+    RowLayout {
         anchors.fill: parent
+        spacing: 0
 
-        // LEFT - 25%
+        // Left side: category buttons
         Rectangle {
-            width: parent.width * 0.25
-            height: parent.height
-            color: "#f0f0f0"
+            Layout.preferredWidth: parent.width * 0.25
+            Layout.fillHeight: true
+            color: "#2c3e50"  // Dark sidebar background
 
-            Column {
+            ColumnLayout {
                 anchors.fill: parent
-                spacing: 10
-                padding: 12
+                anchors.margins: 12
+                spacing: 8
 
-                Button { text: "Productivity"; onClicked: appProxyModel.setFilterFixedString("Productivity") }
-                Button { text: "Setup"; onClicked: appProxyModel.setFilterFixedString("Setup") }
-                Button { text: "Support"; onClicked: appProxyModel.setFilterFixedString("Support") }
-                Button { text: "Tools"; onClicked: appProxyModel.setFilterFixedString("Tools") }
-                Button { text: "Favourite"; onClicked: appProxyModel.setFilterFixedString("Favourite") }
-
-                // quick reset / show all
-                Button { text: "Show All"; onClicked: appProxyModel.setFilterFixedString("") }
-
-                // A simple filter text input (extra): filters name too
-                TextField {
-                    id: txtFilter
-                    placeholderText: "(optional) filter names..."
-                    onTextChanged: {
-                        // when user types, filter using a regex on the display role (name)
-                        // We temporarily change filter role to NameRole (role id is 1), then restore
-                        // NOTE: this is a simple approach; appProxyModel is a QSortFilterProxyModel from C++
-                        appProxyModel.setFilterRole(1); // NameRole is Qt::UserRole+1 -> role id is 257 in practice, but QML sees role indexes starting from 1 if exposed. If this doesn't match, use a small helper in C++ to expose a setter; see notes.
-                        appProxyModel.setFilterFixedString(txtFilter.text)
-                        // restore filter role to CategoryRole for button clicks
-                        // In practice, button clicks set filter role first; this TextField changes role temporarily.
-                        appProxyModel.setFilterRole(2) // CategoryRole index — see C++ role mapping if needed
+                Repeater {
+                    model: categoriesModel
+                    delegate: Button {
+                        text: category
+                        font.bold: true
+                        background: Rectangle {
+                            radius: 6
+                            color: pressed ? "#1abc9c" : "#34495e"
+                        }
+                        contentItem: Text {
+                            text: category
+                            color: "white"
+                            font.pixelSize: 30
+                            anchors.centerIn: parent
+                        }
+                        onClicked: appProxyModel.setFilterFixedString(category)
                     }
+                }
+
+                Rectangle {
+                    height: 1
+                    color: "#7f8c8d"
+                    Layout.fillWidth: true
+                    Layout.margins: 5
+                }
+
+                Button {
+                    text: "Show All"
+                    font.bold: true
+                    background: Rectangle {
+                        radius: 6
+                        color: pressed ? "#1abc9c" : "#34495e"
+                    }
+                    contentItem: Text {
+                        text: "Show All"
+                        color: "white"
+                        font.pixelSize: 16
+                        anchors.centerIn: parent
+                    }
+                    onClicked: appProxyModel.setFilterFixedString("")
                 }
             }
         }
 
-        // RIGHT - 75%
+        // Right side: apps grid
         Rectangle {
-            width: parent.width * 0.75
-            height: parent.height
-            color: "white"
+            Layout.preferredWidth: parent.width * 0.75
+            Layout.fillHeight: true
+            color: "#ecf0f1" // Light background
 
-            Column {
+            GridView {
+                id: appsGrid
                 anchors.fill: parent
-                spacing: 8
-                padding: 12
+                anchors.margins: 16
+                model: appProxyModel
+                cellWidth: 160
+                cellHeight: 90
+               // spacing: 12
 
-                Text { text: "Apps"; font.pixelSize: 20 }
+                delegate: Rectangle {
+                    width: 150
+                    height: 80
+                    radius: 10
+                    color: "#ffffff"
+                    border.width: 1
+                    border.color: "#bdc3c7"
 
-                ListView {
-                    id: listView
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    model: appProxyModel
-                    delegate: ItemDelegate {
-                        width: parent.width
-                        text: model.name
-                        onClicked: {
-                            // show plugin name quickly
-                            console.log("Clicked app:", model.name, "plugin:", model.plugin)
-                        }
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onEntered: parent.color = "#dfe6e9"
+                        onExited: parent.color = "#ffffff"
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: name
+                        color: "#2c3e50"
+                        font.pixelSize: 15
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.Wrap
                     }
                 }
             }

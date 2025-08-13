@@ -16,7 +16,6 @@ public:
     Q_PROPERTY(QSortFilterProxyModel* filteredAppModel READ filteredAppModel CONSTANT)
 
 public:
-   // explicit ModelsWrapper(QObject *parent = nullptr);
     Q_INVOKABLE bool loadFromJson(const QString &path);
     Q_INVOKABLE void setCategoryFilter(const QString &category);
 

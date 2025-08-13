@@ -27,3 +27,6 @@ HEADERS += \
     AppModel.h \
     CategoriesModel.h \
     Wrapper.h
+
+DISTFILES += \
+    Data.json

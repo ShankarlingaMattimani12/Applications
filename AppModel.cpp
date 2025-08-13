@@ -73,7 +73,7 @@ bool AppModel::loadFromJson(const QString &filePath)
         AppItem item;
         item.name = appObj["name"].toString();
         item.category = appObj["category"].toString();
-        item.plugin = appObj["plugin"].toString();
+        //item.plugin = appObj["plugin"].toString();
         m_items.push_back(item);
     }
 

@@ -34,9 +34,12 @@ QVariant CategoriesModel::data(const QModelIndex &index, int role) const {
 }
 
 void CategoriesModel::setCategories(const QStringList &cats) {
+    qDebug() << "size ----"<<m_categories.size();
     beginResetModel();
     m_categories = cats;
     endResetModel();
+    qDebug() << "size 111----"<<m_categories.size();
+
 }
 
 void CategoriesModel::loadFromJson(const QString &filePath) {

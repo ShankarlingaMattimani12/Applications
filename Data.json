@@ -1,0 +1,30 @@
+{
+    "categories": [
+        "Production",
+        "Testing",
+        "Setup",
+        "Development",
+        "Maintenance",
+        "Quality Control",
+        "Research",
+        "Design"
+    ],
+    "apps": [
+        { "name": "NC Cutting", "category": "Production" },
+        { "name": "Assembly Line Monitor", "category": "Production" },
+        { "name": "App 2", "category": "Testing" },
+        { "name": "Unit Test Runner", "category": "Testing" },
+        { "name": "Setup Wizard", "category": "Setup" },
+        { "name": "Config Manager", "category": "Setup" },
+        { "name": "Dev Tracker", "category": "Development" },
+        { "name": "Code Analyzer", "category": "Development" },
+        { "name": "Machine Maintenance Log", "category": "Maintenance" },
+        { "name": "Calibration Tool", "category": "Maintenance" },
+        { "name": "Quality Report Generator", "category": "Quality Control" },
+        { "name": "Defect Tracker", "category": "Quality Control" },
+        { "name": "R&D Data Logger", "category": "Research" },
+        { "name": "Prototype Tester", "category": "Research" },
+        { "name": "CAD Designer", "category": "Design" },
+        { "name": "UI Mockup Tool", "category": "Design" }
+    ]
+}
